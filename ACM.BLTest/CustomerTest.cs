@@ -34,7 +34,7 @@ namespace ACM.BLTest
             //-- Arrange
             // use var instead of full type name when it is clear what type it is to improve readability and conciseness of code
             var customer = new Customer();
-            customer.LastName = "Baggins";
+            customer.FirstName = "";
 
             string expected = "Baggins";
 
@@ -52,6 +52,7 @@ namespace ACM.BLTest
             //-- Arrange
             var customer = new Customer();
             customer.FirstName = "Bilbo";
+            customer.LastName = "";
 
             string expected = "Bilbo";
 
@@ -109,6 +110,7 @@ namespace ACM.BLTest
             //-- Arrange
             var customer = new Customer();
             customer.LastName = "Baggins";
+            customer.EmailAddress = "";
 
             //-- Act
             var actual = customer.Validate();
@@ -125,6 +127,7 @@ namespace ACM.BLTest
             //-- Arrange
             var customer = new Customer();
             customer.EmailAddress = "test@example.com";
+            customer.LastName = "";
 
             //-- Act
             var actual = customer.Validate();
@@ -140,6 +143,8 @@ namespace ACM.BLTest
         {
             //-- Arrange
             var customer = new Customer();
+            customer.EmailAddress = "";
+            customer.LastName = "";
 
             //-- Act
             var actual = customer.Validate();
@@ -158,7 +163,7 @@ namespace ACM.BLTest
             var expectedCustomerId = 1;
             var expectedFirstName = "Bilbo";
             var expectedLastName = "Baggins";
-            var expectedEmailAddress = "bbaggins@hobbiton.me";
+            var expectedEmailAddress = "Bilbo.Baggins@hobbiton.me";
 
             //-- Act
 
@@ -178,7 +183,7 @@ namespace ACM.BLTest
             var expectedCustomerId = 999999;
             var expectedFirstName = "Bilbo";
             var expectedLastName = "Baggins";
-            var expectedEmailAddress = "bbaggins@hobbiton.me";
+            var expectedEmailAddress = "Bilbo.Baggins@hobbiton.me";
 
             //-- Act
 

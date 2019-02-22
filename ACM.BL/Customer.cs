@@ -50,10 +50,10 @@ namespace ACM.BL
 
         //Constructors
         public Customer() :
-            this(InstanceCount + 1, "Baggins", "Frodo", "fbaggins@hobbiton.me", new List<Address>())
+            this(InstanceCount + 1, "Baggins", "Frodo", "Frodo.Baggins@hobbiton.me", new List<Address>())
         { }
         public Customer(int customerId) :
-            this(customerId, "Lastname", "Firstname", "FirstName.Lastname@gmail.com", new List<Address>())
+            this(customerId, "Baggins", "Frodo", "Frodo.Baggins@hobbiton.me", new List<Address>())
         { }
         public Customer(string fullName) :
             this(InstanceCount + 1, GetLastNameFromFullName(fullName), GetFirstNameFromFullName(fullName), GetEmailAddressFromFullName(fullName), new List<Address>())
@@ -178,8 +178,10 @@ namespace ACM.BL
                     cnt++;
                 }
             }
+            var firstName = names[firstNamePosition];
+            var lastName = names[lastNamePosition];
 
-            emailAddress = names[firstNamePosition] + "." + names[lastNamePosition] + "@gmail.com";
+            emailAddress = firstName + "." + lastName + SetEmailSuffix(firstName, lastName);
 
             return emailAddress;
         }
@@ -195,6 +197,18 @@ namespace ACM.BL
 
             return emailSuffix;
         }
+
+        public static string SetEmailSuffix(string firstName, string lastName)
+        {
+            var emailSuffix = "@example.com";
+
+            if (IsHobbit(firstName, lastName))
+            {
+                emailSuffix = "@hobbiton.me";
+            }
+
+            return emailSuffix;
+        }
         public bool IsHobbit()
         {
             var isHobbit = false;
@@ -203,6 +217,21 @@ namespace ACM.BL
 
             if (hobbitFirstNames.Any(hobbitFirstName => hobbitFirstName == FirstName)
                 || hobbitLastNames.Any(hobbitLastName => hobbitLastName == LastName))
+            {
+                isHobbit = true;
+            }
+
+            return isHobbit;
+        }
+
+        public static bool IsHobbit(string firstName, string lastName)
+        {
+            var isHobbit = false;
+            var hobbitFirstNames = new List<string>() { "Frodo", "Bilbo" };
+            var hobbitLastNames = new List<string>() { "Baggins" };
+
+            if (hobbitFirstNames.Any(hobbitFirstName => hobbitFirstName == firstName)
+                || hobbitLastNames.Any(hobbitLastName => hobbitLastName == lastName))
             {
                 isHobbit = true;
             }
