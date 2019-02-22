@@ -5,21 +5,35 @@ using System.Text;
 
 namespace ACM.BL
 {
-    public class Order: EntityBase, ILoggable
+    public class Order : EntityBase, ILoggable
     {
-        public Order()
-        {
-
-        }
-        public Order(int orderId)
-        {
-            this.OrderId = orderId;
-        }
+        //Attributes
+        public static int InstanceCount { get; set; }
         public int OrderId { get; set; }
         public Customer Customer { get; set; }
         public DateTime OrderDate { get; set; }
         public Address ShippingAddress { get; set; }
 
+        //Constructors
+        public Order() : this(InstanceCount + 1, new Customer(), new DateTime(), new Address())
+        { }
+        public Order(int orderId) : this(orderId, new Customer(), new DateTime(), new Address())
+        { }
+        public Order(int orderId, Customer customer) : this(orderId, customer, new DateTime(), new Address())
+        { }
+        public Order(int orderId, Customer customer, DateTime orderDate) : this(orderId, customer, orderDate, new Address())
+        { }
+
+        public Order(int orderId, Customer customer, DateTime orderDate, Address shippingAddress)
+        {
+            OrderId = orderId;
+            Customer = customer;
+            OrderDate = orderDate;
+            ShippingAddress = shippingAddress;
+            InstanceCount += 1;
+        }
+
+        //Methods
         public string Log()
         {
             throw new NotImplementedException();

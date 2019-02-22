@@ -10,58 +10,92 @@ namespace ACM.BL
 {
     public class Customer : EntityBase, ILoggable
     {
-        public Customer()
-            : this(InstanceCount + 1)
+        //Attributes
+        public static int InstanceCount { get; set; }
+        //Use this (LastName) format if you need to customize something in getter or setter.
+        private string _lastName;
+        public string LastName
         {
-            InstanceCount += 1;
+            get
+            {
+                return _lastName;
+            }
+            set
+            {
+                _lastName = value;
+            }
         }
-        public Customer(int customerId)
+        public List<Address> Addresses { get; set; }
+        // Create generic property with Intellisense (Ctrl K + Ctrl X), Visual C#, prop
+        public string FirstName { get; set; }
+        public string EmailAddress { get; set; }
+        // Private setter with Intellisense (Ctrl K + Ctrl X), Visual C#, propg
+        public int Id { get; private set; }
+        public string FullName
         {
-            CustomerId = customerId;
-            InstanceCount += 1;
-        }
-        public Customer(string fullName)
-            : this(InstanceCount + 1, fullName)
-        {
+            get
+            {
+                string fullName = LastName;
+                if (!string.IsNullOrEmpty(FirstName))
+                {
+                    if (!string.IsNullOrEmpty(fullName))
+                    {
+                        fullName += ", ";
+                    }
+                    fullName += FirstName;
+                }
+                return fullName;
+            }
         }
 
-        public Customer(int customerId, string fullName)
+        //Constructors
+        public Customer() :
+            this(InstanceCount + 1, "Baggins", "Frodo", "fbaggins@hobbiton.me", new List<Address>())
+        { }
+        public Customer(int customerId) :
+            this(customerId, "Lastname", "Firstname", "FirstName.Lastname@gmail.com", new List<Address>())
+        { }
+        public Customer(string fullName) :
+            this(InstanceCount + 1, GetLastNameFromFullName(fullName), GetFirstNameFromFullName(fullName), GetEmailAddressFromFullName(fullName), new List<Address>())
+        { }
+
+        public Customer(int customerId, string fullName) :
+            this(customerId, GetLastNameFromFullName(fullName), GetFirstNameFromFullName(fullName), GetEmailAddressFromFullName(fullName), new List<Address>())
+        { }
+        public Customer(string fullName, string emailAddress) :
+            this(InstanceCount + 1, GetLastNameFromFullName(fullName), GetFirstNameFromFullName(fullName), emailAddress, new List<Address>())
+        { }
+        public Customer(int customerId, string fullName, string emailAddress) :
+            this(customerId, GetLastNameFromFullName(fullName), GetFirstNameFromFullName(fullName), emailAddress, new List<Address>())
+        { }
+        public Customer(string lastName, string firstName, string emailAddress) :
+            this(InstanceCount + 1, lastName, firstName, emailAddress, new List<Address>())
+        { }
+        public Customer(int customerId, string lastName, string firstName, string emailAddress) :
+            this(customerId, lastName, firstName, emailAddress, new List<Address>())
+        { }
+
+        public Customer(int customerId, string lastName, string firstName, string emailAddress, List<Address> addresses)
         {
-            CustomerId = customerId;
-            SetFirstAndLastNameWithFullName(fullName);
-            var emailSuffix = SetEmailSuffix();
-            EmailAddress = FirstName.ToLower()[0] + LastName.ToLower() + emailSuffix;
-            InstanceCount += 1;
-        }
-        public Customer(string fullName, string emailAddress)
-        {
-            CustomerId = InstanceCount + 1;
-            var names = fullName.Split(' ');
-            EmailAddress = emailAddress;
-            InstanceCount += 1;
-        }
-        public Customer(int customerId, string fullName, string emailAddress)
-        {
-            CustomerId = customerId;
-            var names = fullName.Split(' ');
-            EmailAddress = emailAddress;
-            InstanceCount += 1;
-        }
-        public Customer(string lastName, string firstName, string emailAddress)
-        {
-            CustomerId = InstanceCount + 1;
+            SetCustomerId(customerId);
             LastName = lastName;
             FirstName = firstName;
             EmailAddress = emailAddress;
+            Addresses = addresses;
             InstanceCount += 1;
         }
-        public Customer(int customerId, string lastName, string firstName, string emailAddress)
+
+        //Methods
+        public void SetCustomerId(int customerId)
         {
-            CustomerId = customerId;
-            LastName = lastName;
-            FirstName = firstName;
-            EmailAddress = emailAddress;
-            InstanceCount += 1;
+            if (customerId > InstanceCount)
+            {
+                Id = customerId;
+            }
+            else
+            {
+                Id = InstanceCount + 1;
+            }
         }
         public void SetFirstAndLastNameWithFullName(string fullName)
         {
@@ -82,6 +116,72 @@ namespace ACM.BL
             }
             LastName = names[lastNamePosition];
             FirstName = names[firstNamePosition];
+        }
+
+        public static string GetLastNameFromFullName(string fullName)
+        {
+            var lastName = fullName;
+            var names = fullName.Split(' ');
+            var lastNamePosition = 1;
+            if (names.Length < 2)
+            {
+                names = fullName.Split(',');
+                lastNamePosition = 0;
+                var cnt = 0;
+                foreach (string name in names)
+                {
+                    names[cnt] = Regex.Replace(name, @"\s+", "");
+                    cnt++;
+                }
+            }
+            lastName = names[lastNamePosition];
+
+            return lastName;
+        }
+
+        public static string GetFirstNameFromFullName(string fullName)
+        {
+            var firstName = fullName;
+            var names = fullName.Split(' ');
+            var firstNamePosition = 0;
+            if (names.Length < 2)
+            {
+                names = fullName.Split(',');
+                firstNamePosition = 1;
+                var cnt = 0;
+                foreach (string name in names)
+                {
+                    names[cnt] = Regex.Replace(name, @"\s+", "");
+                    cnt++;
+                }
+            }
+            firstName = names[firstNamePosition];
+
+            return firstName;
+        }
+
+        public static string GetEmailAddressFromFullName(string fullName)
+        {
+            var emailAddress = fullName;
+            var names = fullName.Split(' ');
+            var lastNamePosition = 1;
+            var firstNamePosition = 0;
+            if (names.Length < 2)
+            {
+                names = fullName.Split(',');
+                lastNamePosition = 0;
+                firstNamePosition = 1;
+                var cnt = 0;
+                foreach (string name in names)
+                {
+                    names[cnt] = Regex.Replace(name, @"\s+", "");
+                    cnt++;
+                }
+            }
+
+            emailAddress = names[firstNamePosition] + "." + names[lastNamePosition] + "@gmail.com";
+
+            return emailAddress;
         }
 
         public string SetEmailSuffix()
@@ -109,42 +209,6 @@ namespace ACM.BL
 
             return isHobbit;
         }
-        public static int InstanceCount { get; set; }
-        //Use this (LastName) format if you need to customize something in getter or setter.
-        private string _lastName;
-        public string LastName
-        {
-            get
-            {
-                return _lastName;
-            }
-            set
-            {
-                _lastName = value;
-            }
-        }
-        public List<Address> Addresses { get; set; }
-        // Create generic property with Intellisense (Ctrl K + Ctrl X), Visual C#, prop
-        public string FirstName { get; set; }
-        public string EmailAddress { get; set; }
-        // Private setter with Intellisense (Ctrl K + Ctrl X), Visual C#, propg
-        public int CustomerId { get; private set; }
-        public string FullName
-        {
-            get
-            {
-                string fullName = LastName;
-                if (!string.IsNullOrEmpty(FirstName))
-                {
-                    if (!string.IsNullOrEmpty(fullName))
-                    {
-                        fullName += ", ";
-                    }
-                    fullName += FirstName;
-                }
-                return fullName;
-            }
-        }
         public override bool Validate()
         {
             var isValid = true;
@@ -162,7 +226,7 @@ namespace ACM.BL
 
         public string Log()
         {
-            var logString = this.CustomerId + ": " +
+            var logString = this.Id + ": " +
                 this.FullName + ": " +
                 "Email: " + this.EmailAddress + " " +
                 "Status: " + this.EntityState.ToString();

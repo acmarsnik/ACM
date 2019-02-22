@@ -19,15 +19,15 @@ namespace Acme.CommonTest
                 EmailAddress = "fbaggins@hobbiton.me",
                 FirstName = "Frodo",
                 LastName = "Baggins",
-                AddressList = null
+                Addresses = null
             };
             changedItems.Add(customer as ILoggable);
 
             var product = new Product(2)
             {
                 ProductName = "Rake",
-                ProductDescription = "Garden Rake with Steel Head",
-                CurrentPrice = "6M"
+                Description = "Garden Rake with Steel Head",
+                CurrentPrice = 6M
             };
             changedItems.Add(product as ILoggable);
 

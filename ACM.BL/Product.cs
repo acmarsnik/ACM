@@ -7,16 +7,8 @@ namespace ACM.BL
 {
     public class Product : EntityBase, ILoggable
     {
-        public Product()
-        {
-
-        }
-
-        public Product(int productId)
-        {
-            ProductId = productId;
-        }
-
+        //Attributes
+        public static int InstanceCount { get; set; }
         public int ProductId { get; set; }
         private String _ProductName;
 
@@ -32,6 +24,27 @@ namespace ACM.BL
         public string Description { get; set; }
         public decimal CurrentPrice { get; set; }
 
+        //Constructors
+        public Product() : this(InstanceCount + 1, "", "", 0)
+        { }
+
+        public Product(int productId) : this(productId, "", "", 0)
+        { }
+        public Product(int productId, string productName) : this(productId, productName, "", 0)
+        { }
+        public Product(int productId, string productName, string description) : this(productId, productName, description, 0)
+        { }
+
+        public Product(int productId, string productName, string description, decimal currentPrice)
+        {
+            ProductId = productId;
+            ProductName = productName;
+            Description = description;
+            CurrentPrice = currentPrice;
+            InstanceCount += 1;
+        }
+
+        //Methods
         public override string ToString()
         {
             return ProductName;

@@ -163,7 +163,7 @@ namespace ACM.BLTest
             //-- Act
 
             //-- Assert
-            Assert.AreEqual(expectedCustomerId.GetTypeCode(), customer.CustomerId.GetTypeCode());
+            Assert.AreEqual(expectedCustomerId.GetTypeCode(), customer.Id.GetTypeCode());
             Assert.AreEqual(expectedFirstName, customer.FirstName);
             Assert.AreEqual(expectedLastName, customer.LastName);
             Assert.AreEqual(expectedEmailAddress, customer.EmailAddress);
@@ -183,7 +183,7 @@ namespace ACM.BLTest
             //-- Act
 
             //-- Assert
-            Assert.AreEqual(expectedCustomerId, customer.CustomerId);
+            Assert.AreEqual(expectedCustomerId, customer.Id);
             Assert.AreEqual(expectedFirstName, customer.FirstName);
             Assert.AreEqual(expectedLastName, customer.LastName);
             Assert.AreEqual(expectedEmailAddress, customer.EmailAddress);
